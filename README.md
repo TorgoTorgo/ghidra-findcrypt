@@ -6,3 +6,5 @@ API to label found constants.
 
 Add this repo to your Ghidra script path. The script is located
 under "Data/Crypt" in the script manager.
+
+To update the signatures [download an updated database](https://github.com/d3v1l401/FindCrypt-Ghidra/raw/master/findcrypt_ghidra/database.d3v).
