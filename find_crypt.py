@@ -71,5 +71,5 @@ if __name__ == '__main__':
         monitor.incrementProgress(1)
         found_addr = currentProgram.getMemory().findBytes(currentProgram.getMinAddress(), sig.data, None, True, monitor)
         if found_addr:
-            print("Labelled {} @ {}".format(sig.name, found_addr))
+            print("Labelled {} @ {} - 0x{:x} bytes".format(sig.name, found_addr, len(sig.data)))
             createLabel(found_addr, sig.name, True)
