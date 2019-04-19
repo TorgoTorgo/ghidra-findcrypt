@@ -4,10 +4,10 @@
 #
 # https://github.com/d3v1l401/FindCrypt-Ghidra/raw/master/findcrypt_ghidra/database.d3v
 #
-# This is base on the above script, but takes better
+# This is based on the above script, but takes better
 # advantage of Ghidra's features.
 #@category Data.Crypt
-#@Author Torgo
+#@author Torgo
 
 from struct import unpack
 from StringIO import StringIO
