@@ -21,10 +21,8 @@ import java.io.IOException;
 import generic.jar.ResourceFile;
 import ghidra.app.services.AbstractAnalyzer;
 import ghidra.app.services.AnalyzerType;
-import ghidra.app.util.CommentTypes;
 import ghidra.app.util.importer.MessageLog;
 import ghidra.framework.Application;
-import ghidra.framework.options.Options;
 import ghidra.program.model.address.Address;
 import ghidra.program.model.address.AddressSetView;
 import ghidra.program.model.data.ArrayDataType;
@@ -33,7 +31,6 @@ import ghidra.program.model.data.DataTypeConflictException;
 import ghidra.program.model.listing.Program;
 import ghidra.program.model.symbol.SourceType;
 import ghidra.program.model.util.CodeUnitInsertionException;
-import ghidra.program.util.CommentType;
 import ghidra.util.InvalidNameException;
 import ghidra.util.Msg;
 import ghidra.util.exception.CancelledException;
@@ -41,27 +38,26 @@ import ghidra.util.exception.InvalidInputException;
 import ghidra.util.task.TaskMonitor;
 
 /**
- * TODO: Provide class-level documentation that describes what this analyzer does.
+ * This analyzer searches through program bytes to locate cryptographic constants and labels them.
  */
 public class FindCryptAnalyzer extends AbstractAnalyzer {
 	
 	private CryptDatabase database;
 
-	public FindCryptAnalyzer() throws FileNotFoundException {
-
-		// TODO: Name the analyzer and give it a description.
-		super("Find Crypt", "Find common crypt constants", AnalyzerType.BYTE_ANALYZER);
+	public FindCryptAnalyzer() {
+		super("Find Crypt", "Find common cryptographic constants", AnalyzerType.BYTE_ANALYZER);
 		this.database = null;
-
 	}
 
 	@Override
 	public boolean getDefaultEnablement(Program program) {
+		// We're on by default
 		return true;
 	}
 
 	@Override
 	public boolean canAnalyze(Program program) {
+		// We can analyze anything with bytes!
 		return true;
 	}
 
@@ -69,6 +65,7 @@ public class FindCryptAnalyzer extends AbstractAnalyzer {
 	public boolean added(Program program, AddressSetView set, TaskMonitor monitor, MessageLog log)
 			throws CancelledException {
 		
+		// If the database hasn't yet been opened, we'll open it
 		if (this.database == null) {
 			try {
 				this.database = new CryptDatabase(log);
@@ -86,46 +83,64 @@ public class FindCryptAnalyzer extends AbstractAnalyzer {
 
 		for (CryptSignature signature : database.getSignatures()) {
 			monitor.checkCanceled();
-			Address found_addr = program.getMemory().findBytes(set.getMinAddress(),
-					signature.getBytes(), null, true, monitor);
-			if (found_addr != null) {
-				Msg.info(this, String.format("Labelled %s @ %s - %d bytes", signature.getName(),
-						found_addr.toString(), signature.getBytes().length));
-				try {
-					// Add a symbol
-					program.getSymbolTable().createLabel(found_addr, "CRYPT_" + signature.getName(), SourceType.ANALYSIS);
-					
-					// Add a comment
-					program.getListing().setComment(found_addr, 0, String.format("Crypt constant %s - %d bytes",
-							signature.getName(), signature.getBytes().length));
-					
-					// Try to create an array
-					ArrayDataType dt = new ArrayDataType(ByteDataType.DEFAULT, signature.getBytes().length, 1);
+			
+			// We'll start searching from the top of the newly added address range
+			Address search_from = set.getMinAddress();
+			
+			while (search_from != null) {
+				monitor.checkCanceled();
+				
+				// Starting at min_address, find the next occurrence of the bytes from the signature
+				Address found_addr = program.getMemory().findBytes(search_from,
+						signature.getBytes(), null, true, monitor);
+				
+				if (found_addr != null) {
+					Msg.info(this, String.format("Labelled %s @ %s - %d bytes", signature.getName(),
+							found_addr.toString(), signature.getBytes().length));
 					try {
-						dt.setName("CRYPT_"+ signature.getName());
-					} catch (InvalidNameException e) {
-						Msg.error(this, "Failed to name datatype " + "CRYPT_" + signature.getName(), e);
+						// Add a symbol
+						program.getSymbolTable().createLabel(found_addr, "CRYPT_" + signature.getName(), SourceType.ANALYSIS);
+						
+						// Add a comment
+						program.getListing().setComment(found_addr, 0, String.format("Crypt constant %s - %d bytes",
+								signature.getName(), signature.getBytes().length));
+						
+						// Try to create an array
+						ArrayDataType dt = new ArrayDataType(new ByteDataType(), signature.getBytes().length, 1);
+						try {
+							dt.setName("CRYPT_"+ signature.getName());
+						} catch (InvalidNameException e) {
+							Msg.error(this, "Failed to name datatype " + "CRYPT_" + signature.getName(), e);
+						}
+						
+						try {
+							program.getListing().createData(found_addr, dt);
+						} catch (CodeUnitInsertionException | DataTypeConflictException e) {
+							// We failed to attach the datatype, this is probably due to existing data
+							// If that's the case, we probably don't want to overwrite it...
+							Msg.warn(this, "Could not apply datatype for crypt constant", e);
+						}
+						
+					} catch (InvalidInputException e) {
+						log.appendException(e);
+						return false;
 					}
 					
-					try {
-						program.getListing().createData(found_addr, dt);
-					} catch (CodeUnitInsertionException | DataTypeConflictException e) {
-						// We failed to attach the datatype, this is probably due to existing data
-						// If that's the case, we probably don't want to overwrite it...
-						Msg.warn(this, "Could not apply datatype for crypt constant", e);
-					}
-					
-				} catch (InvalidInputException e) {
-					log.appendException(e);
-					return false;
+					// Now we search from the address after
+					search_from = found_addr.next();
+				} else {
+					// We didn't find anything... break
+					search_from = null;
 				}
 			}
 		}
+		
 		return true;
 	}
 	
 	@Override
 	public void analysisEnded(Program program) {
+		// Drop the database and end the analysis
 		this.database = null;
 		super.analysisEnded(program);
 	}
