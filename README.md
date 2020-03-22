@@ -1,10 +1,48 @@
 # Ghidra FindCrypt
 
 This is a re-write of another [Ghidra FindCrypt](https://github.com/d3v1l401/FindCrypt-Ghidra/) script
-in python. It also takes better advantage of the Ghidra
+as ana analysis module. It also takes better advantage of the Ghidra
 API to label found constants.
 
-Add this repo to your Ghidra script path. The script is located
-under "Data/Crypt" in the script manager.
+## Updating sigs
 
-To update the signatures [download an updated database](https://github.com/d3v1l401/FindCrypt-Ghidra/raw/master/findcrypt_ghidra/database.d3v).
+To update the database run `update.sh` and re-build and re-install the plugin.
+
+## Building
+
+FindCrypt builds like a standard Ghidra module:
+
+```bash
+cd FindCrypt
+GHIDRA_INSTALL_DIR=/path/to/Ghidra_PUBLIC... gradle
+```
+
+This will output a zip in the `FindCrypt/dist/` directory.
+
+## Installing
+
+This can be installed into Ghidra like so:
+- From the Project window hit `File` -> `Install extensions...`
+- Click the green plus icon on the top right
+- In the file browser that opens, select the zip from the `FindCrypt/dist` directory
+- Click OK and restart Ghidra
+
+## Using
+
+Once the script is installed, a new Analysis is added to the Auto Analyze window
+called "Find Crypt", it's enabled by default and it's safe to re-run. If you have
+an existing file, open the "Analysis" menu in the CodeBrowser tool and click
+"Auto Analyze". Select the "Find Crypt" analysis from the list and click Analyze.
+
+Once the analysis is complete, any found crypt constants will be labeled with
+the algorithm they're associated with. You can find these labels in the "Labels"
+folder in the Symbol Tree window. The labels are prefixed with `CRYPT_` to group
+them together.
+
+The analysis will also try to set the datatype for the found constants, but if
+a datatype has been applied by another analysis module that other module will
+take precedence.
+
+A comment is always placed when a crypt constant is found to tell you the type
+and the size of the constant, just in case the datatype wasn't applied.
+

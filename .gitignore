@@ -1,0 +1,8 @@
+FindCrypt/bin/
+FindCrypt/dist/
+FindCrypt/build/
+FindCrypt/.classpath
+FindCrypt/.project
+FindCrypt/.pydevproject
+FindCrypt/.gradle
+FindCrypt/.settings

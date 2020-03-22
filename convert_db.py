@@ -1,4 +1,5 @@
-# Find crypt constants and label them
+# Take a database of crypt constants and output a database
+# that is compatable with the FindCrypt plugin.
 #
 # Uses a database of constants from the FindCrypt repo.
 #
@@ -9,7 +10,7 @@
 #@category Data.Crypt
 #@author Torgo
 
-from struct import unpack
+from struct import unpack, pack
 from StringIO import StringIO
 from gzip import GzipFile
 
@@ -21,7 +22,7 @@ class CryptSignature(object):
         self.data = data
 
     def serialize(self):
-        return pack(">I{}sbI{}s", len(self.name), name, 0x0, len(self.data), data)
+        return pack(">I{}sbI{}s".format(len(self.name), len(self.data)), len(self.name), self.name, 0x0, len(self.data), self.data)
 
 class CryptDatabase(object):
     path = None
@@ -34,7 +35,6 @@ class CryptDatabase(object):
         self.signatures = list()
         with open(self.path, 'rb') as f:
             magic = f.read(4)
-            print(magic)
             if magic != b'\xD3\x01\x04\x01':
                 raise Exception("Not a FindCrypt database. Incorrect magic : {}".format(magic))
 
@@ -56,20 +56,16 @@ class CryptDatabase(object):
     def serialize(self, path):
         with open(path, 'wb') as f:
             f.write(b'\xD3\x01\x04\x01')
+            f.write(pack('>h', len(self.signatures)))
             for sig in self.signatures:
                 f.write(sig.serialize())
-            
 
 if __name__ == '__main__':
-    db_path = str(askFile("Signature database", "Open findcrypt db"))
-    db = CryptDatabase(db_path)
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('INPUT')
+    parser.add_argument('OUTPUT')
+    args = parser.parse_args()
 
-    monitor.setMessage("Scanning for crypt")
-    monitor.initialize(len(db.signatures))
-    for sig in db.signatures:
-        monitor.checkCanceled()
-        monitor.incrementProgress(1)
-        found_addr = currentProgram.getMemory().findBytes(currentProgram.getMinAddress(), sig.data, None, True, monitor)
-        if found_addr:
-            print("Labelled {} @ {} - 0x{:x} bytes".format(sig.name, found_addr, len(sig.data)))
-            createLabel(found_addr, sig.name, True)
+    db = CryptDatabase(args.INPUT)
+    db.serialize(args.OUTPUT)
