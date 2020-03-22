@@ -1,7 +1,7 @@
 # Ghidra FindCrypt
 
 This is a re-write of another [Ghidra FindCrypt](https://github.com/d3v1l401/FindCrypt-Ghidra/) script
-as ana analysis module. It also takes better advantage of the Ghidra
+as an auto analysis module. It also takes better advantage of the Ghidra
 API to label found constants.
 
 ## Updating sigs
@@ -21,10 +21,13 @@ This will output a zip in the `FindCrypt/dist/` directory.
 
 ## Installing
 
-This can be installed into Ghidra like so:
+You can either build it yourself (see above) or download
+a zip from the [GitLab releases](https://gitlab.com/Torgo/ghidra_findcrypt/-/releases)
+
+The extension can be installed into Ghidra like so:
 - From the Project window hit `File` -> `Install extensions...`
 - Click the green plus icon on the top right
-- In the file browser that opens, select the zip from the `FindCrypt/dist` directory
+- In the file browser that opens, select the zip
 - Click OK and restart Ghidra
 
 ## Using
