@@ -1,4 +1,5 @@
 # Ghidra FindCrypt
+![Bug eyed Ghidra looks at complex algorithms](docs/findcrypt_logo.png)
 
 [![pipeline status](https://gitlab.com/Torgo/ghidra_findcrypt/badges/master/pipeline.svg)](https://gitlab.com/Torgo/ghidra_findcrypt/pipelines/master/latest)
 
