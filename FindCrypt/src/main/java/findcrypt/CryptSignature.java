@@ -4,8 +4,9 @@
 package findcrypt;
 
 /**
- * @author torgo
+ * A cryptographic constant we can search for
  *
+ * @author torgo
  */
 public class CryptSignature {
 	private String name;
@@ -22,9 +23,5 @@ public class CryptSignature {
 	
 	public String getName() {
 		return this.name;
-	}
-	
-	public void deserialize() {
-		
 	}
 }
