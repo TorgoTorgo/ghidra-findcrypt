@@ -1,5 +1,7 @@
 # Ghidra FindCrypt
 
+[![pipeline status](https://gitlab.com/Torgo/ghidra_findcrypt/badges/master/pipeline.svg)](https://gitlab.com/Torgo/ghidra_findcrypt/pipelines/master/latest)
+
 This is a re-write of another [Ghidra FindCrypt](https://github.com/d3v1l401/FindCrypt-Ghidra/) script
 as an auto analysis module. It also takes better advantage of the Ghidra
 API to label found constants.
