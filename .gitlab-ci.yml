@@ -1,0 +1,23 @@
+variables:
+    GHIDRA_PLUGIN_BUILDER: registry.gitlab.com/torgo/ghidra-container/ghidra-plugin-builder
+
+.build:
+    image: ${GHIDRA_PLUGIN_BUILDER}:${GHIDRA_VERSION}
+    tags:
+        - docker
+    script:
+        - cd FindCrypt
+        - gradle
+    artifacts:
+        paths:
+            - FindCrypt/dist/*.zip
+
+Ghidra 9.1.2:
+    extends: .build
+    variables:
+        GHIDRA_VERSION: 9.1.2
+
+Ghidra 9.1.1:
+    extends: .build
+    variables:
+        GHIDRA_VERSION: 9.1.1
