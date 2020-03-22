@@ -12,12 +12,13 @@ import java.util.ArrayList;
 import org.apache.commons.lang3.NotImplementedException;
 
 import ghidra.app.util.importer.MessageLog;
-import ghidra.framework.Application;
 import ghidra.util.Msg;
 
 /**
- * @author torgo
+ * A simple data structure that deserializes {@link CryptSignature}
+ * objects from a file.
  *
+ * @author torgo
  */
 public class CryptDatabase {
 	private ArrayList<CryptSignature> signatures;
@@ -28,6 +29,12 @@ public class CryptDatabase {
 		this.log = log;
 	}
 	
+	/**
+	 * Parse the given input stream as a serialized CryptDatabase.
+	 *
+	 * @param stream An InputStream containing a serialized CryptDatabase
+	 * @throws IOException
+	 */
 	public void parse(InputStream stream) throws IOException {
 		// Parse out sigs
 		byte[] _buff = stream.readAllBytes();
