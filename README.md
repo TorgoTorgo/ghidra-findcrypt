@@ -1,7 +1,8 @@
 # Ghidra FindCrypt
 ![Bug eyed Ghidra looks at complex algorithms](docs/findcrypt_logo.png)
 
-[![pipeline status](https://gitlab.com/Torgo/ghidra_findcrypt/badges/master/pipeline.svg)](https://gitlab.com/Torgo/ghidra_findcrypt/pipelines/master/latest)
+[![Github status](https://github.com/TorgoTorgo/ghidra-findcrypt/actions/workflows/main.yml/badge.svg)](https://github.com/TorgoTorgo/ghidra-findcrypt/actions/workflows/main.yml)
+[![Gitlab status](https://gitlab.com/Torgo/ghidra_findcrypt/badges/master/pipeline.svg)](https://gitlab.com/Torgo/ghidra_findcrypt/pipelines/master/latest)
 
 This is a re-write of another [Ghidra FindCrypt](https://github.com/d3v1l401/FindCrypt-Ghidra/) script
 as an auto analysis module. It also takes better advantage of the Ghidra
@@ -25,7 +26,7 @@ This will output a zip in the `FindCrypt/dist/` directory.
 ## Installing
 
 You can either build it yourself (see above) or download
-a zip from the [GitLab releases](https://gitlab.com/Torgo/ghidra_findcrypt/-/releases)
+a zip from the [Github releases](https://github.com/TorgoTorgo/ghidra-findcrypt/releases) or [GitLab releases](https://gitlab.com/Torgo/ghidra_findcrypt/-/releases)
 
 The extension can be installed into Ghidra like so:
 - From the Project window hit `File` -> `Install extensions...`
