@@ -1,0 +1,41 @@
+# vim: expandtab tabstop=2 shiftwidth=2
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  release:
+    types:
+      - created
+
+jobs:
+  build:
+    name: 'Build Ghidra FindCrypt extension'
+    strategy:
+      matrix:
+        ghidra:
+          - version: "9.2.2"
+          - version: "9.2.1"
+          - version: "9.2"
+          - version: "9.1.2"
+    runs-on: "ubuntu-latest"
+    container: registry.gitlab.com/torgo/ghidra-container/ghidra-plugin-builder:${{ matrix.ghidra.version }}
+    steps:
+      - name: "Clone FindCrypt"
+        uses: actions/checkout@v2
+      - name: "Compile FindCrypt - ${{ matrix.ghidra.version }}"
+        run: |
+          cd FindCrypt
+          gradle
+          ls -lah dist/
+      - name: "Upload FindCrypt - ${{ matrix.ghidra.version }}"
+        uses: actions/upload-artifact@v2
+        with:
+          name: ghidra_${{ matrix.ghidra.version }}_FindCrypt
+          path: |
+            README.md
+            FindCrypt/dist/*.zip
+      
+  
