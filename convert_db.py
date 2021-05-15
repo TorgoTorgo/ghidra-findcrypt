@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Take a database of crypt constants and output a database
 # that is compatable with the FindCrypt plugin.
 #
@@ -11,7 +13,7 @@
 #@author Torgo
 
 from struct import unpack, pack
-from StringIO import StringIO
+from io import StringIO
 from gzip import GzipFile
 
 class CryptSignature(object):
