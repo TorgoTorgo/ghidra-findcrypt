@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Take a database of crypt constants and output a database
 # that is compatable with the FindCrypt plugin.
 #
@@ -11,7 +13,7 @@
 #@author Torgo
 
 from struct import unpack, pack
-from StringIO import StringIO
+from io import StringIO
 from gzip import GzipFile
 
 class CryptSignature(object):
@@ -43,6 +45,7 @@ class CryptDatabase(object):
                 name_size = unpack('>I', f.read(4))[0]
                 name = unpack('{}s'.format(name_size), f.read(name_size))[0]
                 compressed = unpack('>b', f.read(1))[0] == b'\x01'
+                unknown_val = unpack('>I', f.read(4))[0]
                 buff_size = unpack('>I', f.read(4))[0]
                 buff = unpack('{}s'.format(buff_size), f.read(buff_size))[0]
                 if compressed:
