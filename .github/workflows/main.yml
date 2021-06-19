@@ -16,6 +16,8 @@ jobs:
     strategy:
       matrix:
         ghidra:
+          - version: "10.0.0-beta"
+          - version: "9.2.4"
           - version: "9.2.2"
           - version: "9.2.1"
           - version: "9.2"
