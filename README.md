@@ -8,10 +8,6 @@ This is a re-write of another [Ghidra FindCrypt](https://github.com/d3v1l401/Fin
 as an auto analysis module. It also takes better advantage of the Ghidra
 API to label found constants.
 
-## Updating sigs
-
-To update the database run `update.sh` and re-build and re-install the plugin.
-
 ## Building
 
 FindCrypt builds like a standard Ghidra module:

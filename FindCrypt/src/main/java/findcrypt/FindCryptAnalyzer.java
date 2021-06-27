@@ -16,6 +16,8 @@
 package findcrypt;
 
 import java.io.IOException;
+import java.io.Reader;
+import java.nio.file.Files;
 
 import generic.jar.ResourceFile;
 import ghidra.app.services.AbstractAnalyzer;
@@ -67,10 +69,12 @@ public class FindCryptAnalyzer extends AbstractAnalyzer {
 		// If the database hasn't yet been opened, we'll open it
 		if (this.database == null) {
 			try {
-				this.database = new CryptDatabase(log);
-				ResourceFile file = Application.getModuleFile("FindCrypt", "data/database.d3v");
+				this.database = new CryptDatabase();
+				ResourceFile resourceFile = Application.getModuleFile("FindCrypt", "data/database.json");
 				Msg.info(this, "Loading FindCrypt signature database from file");
-				this.database.parse(file.getInputStream());
+
+				Reader reader = Files.newBufferedReader(resourceFile.getFile(true).toPath());
+				this.database.parse(reader);
 			} catch (IOException e) {
 				log.appendException(e);
 				return false;
