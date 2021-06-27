@@ -3,42 +3,45 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: master
   pull_request:
-    branches: [ master ]
+    branches: master
   release:
     types:
       - created
+  workflow_dispatch:
 
 jobs:
   build:
-    name: 'Build Ghidra FindCrypt extension'
+    name: Build Ghidra FindCrypt extension
     strategy:
+      fail-fast: false
       matrix:
-        ghidra:
-          - version: "10.0"
-          - version: "10.0.0-beta"
-          - version: "9.2.4"
-          - version: "9.2.2"
-          - version: "9.2.1"
-          - version: "9.2"
-          - version: "9.1.2"
-    runs-on: "ubuntu-latest"
-    container: registry.gitlab.com/torgo/ghidra-container/ghidra-plugin-builder:${{ matrix.ghidra.version }}
+        ghidra-version:
+          - '10.0'
+          - '10.0.0-beta'
+          - '9.2.4'
+          - '9.2.2'
+          - '9.2.1'
+          - '9.2'
+          - '9.1.2'
+    runs-on: ubuntu-latest
+    container: registry.gitlab.com/torgo/ghidra-container/ghidra-plugin-builder:${{ matrix.ghidra-version }}
     steps:
       - name: "Clone FindCrypt"
         uses: actions/checkout@v2
-      - name: "Compile FindCrypt - ${{ matrix.ghidra.version }}"
+      - name: Compile FindCrypt - ${{ matrix.ghidra-version }}
         run: |
           cd FindCrypt
           gradle
           ls -lah dist/
-      - name: "Upload FindCrypt - ${{ matrix.ghidra.version }}"
+      - name: Upload FindCrypt - ${{ matrix.ghidra-version }}
         uses: actions/upload-artifact@v2
         with:
-          name: ghidra_${{ matrix.ghidra.version }}_FindCrypt
+          name: ghidra_${{ matrix.ghidra-version }}_FindCrypt
           path: |
             README.md
             FindCrypt/dist/*.zip
+          if-no-files-found: error
       
   
