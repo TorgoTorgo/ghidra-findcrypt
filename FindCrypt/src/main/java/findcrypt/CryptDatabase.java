@@ -1,6 +1,3 @@
-/**
- * 
- */
 package findcrypt;
 
 import java.io.IOException;
@@ -21,11 +18,11 @@ import ghidra.util.Msg;
  * @author torgo
  */
 public class CryptDatabase {
-	private ArrayList<CryptSignature> signatures;
-	private MessageLog log;
+	private final ArrayList<CryptSignature> signatures;
+	private final MessageLog log;
 	
 	public CryptDatabase(MessageLog log) {
-		this.signatures = new ArrayList<CryptSignature>();
+		this.signatures = new ArrayList<>();
 		this.log = log;
 	}
 	
@@ -35,13 +32,14 @@ public class CryptDatabase {
 	 * @param stream An InputStream containing a serialized CryptDatabase
 	 * @throws IOException
 	 */
+	@SuppressWarnings("JavaDoc")
 	public void parse(InputStream stream) throws IOException {
-		// Parse out sigs
+		// Parse out signatures
 		byte[] _buff = stream.readAllBytes();
 		ByteBuffer buff = ByteBuffer.wrap(_buff);
 		buff.order(ByteOrder.BIG_ENDIAN);
 		byte[] expected_magic = {(byte) 0xd3, 0x01, 0x04, 0x01};
-		byte magic[] = new byte[4];
+		byte[] magic = new byte[4];
 		
 		buff.get(magic, 0, 4);
 		
@@ -59,7 +57,7 @@ public class CryptDatabase {
 		Msg.info(this, String.format("Loading %d signatures", total_entries));
 		for (int i = 0; i < total_entries; i++) {
 			int name_size = buff.getInt();
-			byte name_buff[] = new byte[name_size];
+			byte[] name_buff = new byte[name_size];
 			buff.get(name_buff, 0, name_size);
 			byte compressed = buff.get();
 			if (compressed == 0x1) {
@@ -70,7 +68,7 @@ public class CryptDatabase {
 				throw e;
 			}
 			int data_size = buff.getInt();
-			byte data[] = new byte[data_size];
+			byte[] data = new byte[data_size];
 			buff.get(data, 0, data_size);
 			this.addSignature(new String(name_buff), data);	
 		}

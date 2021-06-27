@@ -1,6 +1,3 @@
-/**
- * 
- */
 package findcrypt;
 
 /**
@@ -9,8 +6,8 @@ package findcrypt;
  * @author torgo
  */
 public class CryptSignature {
-	private String name;
-	private byte[] data;
+	private final String name;
+	private final byte[] data;
 	
 	public CryptSignature(String name, byte[] data) {
 		this.name = name;

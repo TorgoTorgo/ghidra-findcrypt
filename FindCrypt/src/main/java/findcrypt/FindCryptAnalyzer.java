@@ -15,7 +15,6 @@
  */
 package findcrypt;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import generic.jar.ResourceFile;
@@ -72,9 +71,6 @@ public class FindCryptAnalyzer extends AbstractAnalyzer {
 				ResourceFile file = Application.getModuleFile("FindCrypt", "data/database.d3v");
 				Msg.info(this, "Loading FindCrypt signature database from file");
 				this.database.parse(file.getInputStream());
-			} catch (FileNotFoundException e) {
-				log.appendException(e);
-				return false;
 			} catch (IOException e) {
 				log.appendException(e);
 				return false;
