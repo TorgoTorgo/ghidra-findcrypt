@@ -19,6 +19,9 @@ GHIDRA_INSTALL_DIR=/path/to/Ghidra_PUBLIC... gradle
 
 This will output a zip in the `FindCrypt/dist/` directory.
 
+Note: Ghidra FindCrypt no longer supports Ghidra versions prior to 9.2 as they
+lack the Gson JSON library.
+
 ## Installing
 
 You can either build it yourself (see above) or download

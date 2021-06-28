@@ -24,6 +24,7 @@ jobs:
           - '9.2.2'
           - '9.2.1'
           - '9.2'
+          # Ghidra versions prior to 9.2 lack the Gson JSON library, and are not supported.
     runs-on: ubuntu-latest
     container: registry.gitlab.com/torgo/ghidra-container/ghidra-plugin-builder:${{ matrix.ghidra-version }}
     steps:
