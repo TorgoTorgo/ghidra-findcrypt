@@ -41,3 +41,5 @@ Ghidra 9.2:
     extends: .build
     variables:
         GHIDRA_VERSION: "9.2"
+
+# Ghidra versions prior to 9.2 lack the Gson JSON library, and are not supported.
