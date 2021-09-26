@@ -18,18 +18,13 @@ jobs:
       fail-fast: false
       matrix:
         ghidra-version:
+          - 'latest'
           - '10.0.3'
           - '10.0.2'
           - '10.0.1'
-          - '10.0'
-          - '10.0.0-beta'
-          - '9.2.4'
-          - '9.2.2'
-          - '9.2.1'
-          - '9.2'
           # Ghidra versions prior to 9.2 lack the Gson JSON library, and are not supported.
     runs-on: ubuntu-latest
-    container: registry.gitlab.com/torgo/ghidra-container/ghidra-plugin-builder:${{ matrix.ghidra-version }}
+    container: ghcr.io/torgotorgo/ghidra-container:${{ matrix.ghidra-version }}
     steps:
       - name: "Clone FindCrypt"
         uses: actions/checkout@v2
@@ -46,5 +41,3 @@ jobs:
             README.md
             FindCrypt/dist/*.zip
           if-no-files-found: error
-      
-  
