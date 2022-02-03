@@ -12,6 +12,27 @@ variables:
         paths:
             - FindCrypt/dist/*.zip
 
+Ghidra 10.1.2:
+    extends: .build
+    variables:
+        GHIDRA_VERSION: "10.1.2"
+
+Ghidra 10.1.1:
+    extends: .build
+    variables:
+        GHIDRA_VERSION: "10.1.1"
+
+
+Ghidra 10.1:
+    extends: .build
+    variables:
+        GHIDRA_VERSION: "10.1"
+
+Ghidra 10.0.4:
+    extends: .build
+    variables:
+        GHIDRA_VERSION: "10.0.4"
+
 Ghidra 10.0.3:
     extends: .build
     variables:
