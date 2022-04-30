@@ -28,9 +28,10 @@ You can either build it yourself (see above) or download
 a zip from the [Github releases](https://github.com/TorgoTorgo/ghidra-findcrypt/releases) or [GitLab releases](https://gitlab.com/Torgo/ghidra_findcrypt/-/releases)
 
 The extension can be installed into Ghidra like so:
+- Extract the zip if downloaded from the release page
 - From the Project window hit `File` -> `Install extensions...`
 - Click the green plus icon on the top right
-- In the file browser that opens, select the zip
+- In the file browser that opens, select the zip. In case of the released zip the final zip is inside  `FindCrypt/dist.
 - Click OK and restart Ghidra
 
 ## Using
