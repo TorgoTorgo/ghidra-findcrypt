@@ -28,7 +28,6 @@ import ghidra.program.model.address.Address;
 import ghidra.program.model.address.AddressSetView;
 import ghidra.program.model.data.ArrayDataType;
 import ghidra.program.model.data.ByteDataType;
-import ghidra.program.model.data.DataTypeConflictException;
 import ghidra.program.model.listing.Program;
 import ghidra.program.model.symbol.SourceType;
 import ghidra.program.model.util.CodeUnitInsertionException;
@@ -115,7 +114,7 @@ public class FindCryptAnalyzer extends AbstractAnalyzer {
 						
 						try {
 							program.getListing().createData(found_addr, dt);
-						} catch (CodeUnitInsertionException | DataTypeConflictException e) {
+						} catch (CodeUnitInsertionException e) {
 							// We failed to attach the datatype, this is probably due to existing data
 							// If that's the case, we probably don't want to overwrite it...
 							Msg.warn(this, "Could not apply datatype for crypt constant", e);
