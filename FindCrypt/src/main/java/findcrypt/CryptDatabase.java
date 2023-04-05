@@ -1,18 +1,11 @@
 package findcrypt;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.apache.commons.lang3.NotImplementedException;
 
-import ghidra.app.util.importer.MessageLog;
 import ghidra.util.Msg;
 
 /**
